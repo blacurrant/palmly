@@ -57,7 +57,7 @@ export default function Home() {
                   <div
                     className={`cloud-layer ${driftClass}`}
                     style={{
-                      backgroundImage: `url('/clouds/${layer}.png')`,
+                      backgroundImage: `url('/Clouds/${layer}.png')`,
                       animationDuration: `${driftDuration}s`,
                     }}
                   ></div>
