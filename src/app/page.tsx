@@ -187,7 +187,7 @@ export default function Home() {
           </p>
           <p>
             Two years of you has been the best and most disorienting thing. I
-            didn't know I was going to love someone the way I love you — a
+            didn't know I was going to love someone the way I love you, a
             little messy, very certain, completely yours.
           </p>
           <p>
