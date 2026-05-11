@@ -1,26 +1,43 @@
 @import "tailwindcss";
 
-:root {
-  --parchment: #f5f4ed;
-  --ivory: #faf9f5;
-  --warm-sand: #e8e6dc;
-  --dark-surface: #30302e;
-  --deep-dark: #141413;
-  --near-black: #141413;
-  --charcoal-warm: #4d4c48;
-  --olive-gray: #5e5d59;
-  --stone-gray: #87867f;
-  --warm-silver: #b0aea5;
-  --terracotta: #c96442;
-  --coral: #d97757;
-  --border-cream: #f0eee6;
-  --border-warm: #e8e6dc;
-  --ring-warm: #d1cfc5;
-  --focus-blue: #3898ec;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-* {
-  box-sizing: border-box;
+@theme {
+  --color-wine: #4a1228;
+  --color-wine-mid: #6b1a38;
+  --color-wine-light: #8b2a4a;
+  --color-blush: #f2c4ce;
+  --color-blush-light: #fdeef1;
+  --color-cream: #fdf6f0;
+  --color-muted: #c9a0aa;
+  --color-gold: #c9956a;
+  
+  --font-serif: var(--font-cormorant), serif;
+  --font-sans: var(--font-dm-sans), sans-serif;
+
+  --animate-cat-float: cat-float 6s ease-in-out infinite;
+
+  @keyframes cat-float {
+    0%, 100% { transform: translateY(0px) rotate(-3deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+  }
+}
+
+:root {
+  --wine: var(--color-wine);
+  --wine-mid: var(--color-wine-mid);
+  --wine-light: var(--color-wine-light);
+  --blush: var(--color-blush);
+  --blush-light: var(--color-blush-light);
+  --cream: var(--color-cream);
+  --muted: var(--color-muted);
+  --gold: var(--color-gold);
 }
 
 html {
@@ -28,31 +45,295 @@ html {
 }
 
 body {
-  background-color: var(--parchment);
-  color: var(--near-black);
-  font-family: system-ui, -apple-system, Arial, sans-serif;
+  background: var(--wine);
+  color: var(--cream);
+  font-family: var(--font-dm-sans), sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 3rem 2rem;
+  }
+}
+
+.hero > *:not(.parallax-hero) {
+  position: relative;
+  z-index: 2; /* Put text above clouds */
+}
+
+.parallax-hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cloud-parallax-wrapper {
+  position: absolute;
+  top: 0;
+  left: -10%; /* Extra bleed for horizontal drift */
+  width: 120%;
+  height: 100%;
+  will-change: transform;
+}
+
+.cloud-enter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation-duration: 2.5s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+.cloud-enter-left {
+  animation-name: cloudEnterLeft;
+}
+
+.cloud-enter-right {
+  animation-name: cloudEnterRight;
+}
+
+.cloud-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+
+@keyframes cloudEnterLeft {
+  0% {
+    transform: translateX(-10vw);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes cloudEnterRight {
+  0% {
+    transform: translateX(10vw);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes cloudDriftLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(4vw);
+  }
+}
+
+@keyframes cloudDriftRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-4vw);
+  }
+}
+
+.cloud-drift-left {
+  animation-name: cloudDriftLeft;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.cloud-drift-right {
+  animation-name: cloudDriftRight;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.paws {
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0.08;
+  user-select: none;
+  pointer-events: none;
+}
+
+
+
+.timeline {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+@media (min-width: 768px) {
+  .timeline {
+    padding: 2rem 1.5rem 4rem;
+  }
+}
+
+/* ── Polaroid card ── */
+.polaroid-card {
+  background: var(--cream);
+  padding: 10px 10px 0;
+  width: 100%;
+  max-width: 320px;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.5s ease;
+}
+
+.polaroid-card:hover {
+  transform: rotate(0deg) translateY(-8px) !important;
+  box-shadow:
+    0 28px 72px rgba(0, 0, 0, 0.7),
+    0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+@media (min-width: 768px) {
+  .polaroid-card {
+    max-width: 400px;
+  }
+}
+
+/* Photo area */
+.polaroid-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.polaroid-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: sepia(12%) contrast(92%) brightness(0.95);
+  transition: filter 0.5s ease;
+}
+
+.polaroid-card:hover .polaroid-photo img {
+  filter: sepia(0%) contrast(100%) brightness(1);
+}
+
+/* Dark photo — entries without images */
+.polaroid-dark-photo {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #2e0a1a 0%, #180610 60%, #0e0408 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.75rem;
+  text-align: center;
+  gap: 1rem;
+}
+
+.polaroid-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  display: block;
+}
+
+.polaroid-body-text {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--blush-light);
+  line-height: 1.75;
+  opacity: 0.82;
+}
+
+/* Label strip */
+.polaroid-label {
+  padding: 14px 8px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.polaroid-label-title {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--wine);
+  line-height: 1.2;
+}
+
+.special .polaroid-label-title {
+  color: var(--wine-mid);
+}
+
+.polaroid-label-text {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.78rem;
+  color: var(--wine-mid);
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+  opacity: 0.7;
+  margin-top: 2px;
 }
 
-.serif {
-  font-family: Georgia, "Times New Roman", serif;
+.polaroid-label-date {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wine-light);
+  opacity: 0.55;
+  margin-top: 2px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+
+
+/* ── Font enforcement ── */
+body {
+  font-family: var(--font-dm-sans), sans-serif;
 }
 
-.fade-in {
-  animation: fadeIn 0.6s ease forwards;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-cormorant), serif;
 }
 
-@keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 100, 66, 0.3); }
-  50% { box-shadow: 0 0 0 8px rgba(201, 100, 66, 0); }
+.font-serif {
+  font-family: var(--font-cormorant), serif !important;
 }
 
-.pulse-ring {
-  animation: pulse-ring 2s ease-in-out infinite;
+.font-sans {
+  font-family: var(--font-dm-sans), sans-serif !important;
 }
+

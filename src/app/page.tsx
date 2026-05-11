@@ -1,298 +1,209 @@
 "use client";
 
-import { useState } from "react";
-import PalmUploader from "@/components/PalmUploader";
-import ReadingResult from "@/components/ReadingResult";
-import PaywallModal from "@/components/PaywallModal";
-import { Lang, t } from "@/lib/translations";
-
-type State = "idle" | "analyzing" | "result" | "error";
-
-interface PalmReading {
-  heartLine: { title: string; reading: string };
-  headLine: { title: string; reading: string };
-  lifeLine: { title: string; preview: string; full: string };
-  fateLine: { title: string; reading: string };
-  mounts: { title: string; reading: string };
-  overall: { title: string; reading: string };
-}
+import { useEffect, useRef } from "react";
+import { timelineEvents } from "../data/timeline";
 
 export default function Home() {
-  const [lang, setLang] = useState<Lang>("en");
-  const [state, setState] = useState<State>("idle");
-  const [palmPreview, setPalmPreview] = useState<string>("");
-  const [reading, setReading] = useState<PalmReading | null>(null);
-  const [unlocked, setUnlocked] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(false);
-  const tx = t[lang];
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const cloudRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  async function handleImage(file: File, preview: string) {
-    setPalmPreview(preview);
-    setState("analyzing");
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
 
-    try {
-      const formData = new FormData();
-      formData.append("palm", file);
-      const res = await fetch("/api/read-palm", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!res.ok || data.error) throw new Error(data.error || "Failed");
-      setReading(data.reading);
-      setState("result");
-    } catch {
-      setState("error");
-    }
-  }
+    const elements = document.querySelectorAll(".entry");
+    elements.forEach((el) => observerRef.current?.observe(el));
 
-  function reset() {
-    setState("idle");
-    setPalmPreview("");
-    setReading(null);
-    setUnlocked(false);
-    setShowPaywall(false);
-  }
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, []);
 
   return (
-    <div style={{
-      minHeight: "100dvh",
-      background: "#f5f4ed",
-      display: "flex",
-      flexDirection: "column",
-      maxWidth: 480,
-      margin: "0 auto",
-      position: "relative",
-    }}>
-      {/* Header */}
-      <header style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "16px 20px",
-        borderBottom: "1px solid #f0eee6",
-        position: "sticky",
-        top: 0,
-        background: "#f5f4ed",
-        zIndex: 10,
-      }}>
-        <h1 style={{
-          fontFamily: "Georgia, serif",
-          fontSize: 22,
-          fontWeight: 500,
-          color: "#141413",
-          letterSpacing: -0.3,
-        }}>
-          Palmly
-        </h1>
-        <button
-          onClick={() => setLang(lang === "en" ? "hi" : "en")}
+    <>
+      <section className="hero">
+        <div className="parallax-hero">
+          {[2, 3, 4, 5, 6].map((layer, index) => {
+            const isLeft = index % 2 === 0;
+            const enterClass = isLeft
+              ? "cloud-enter-left"
+              : "cloud-enter-right";
+            const driftClass = isLeft
+              ? "cloud-drift-left"
+              : "cloud-drift-right";
+            const animDelay = index * 0.2;
+            const driftDuration = 20 + index * 5;
+            return (
+              <div
+                key={layer}
+                ref={(el) => {
+                  cloudRefs.current[index] = el;
+                }}
+                className="cloud-parallax-wrapper"
+                style={{ opacity: 1 - index * 0.1, zIndex: layer + 1 }}
+              >
+                <div
+                  className={`cloud-enter ${enterClass}`}
+                  style={{ animationDelay: `${animDelay}s` }}
+                >
+                  <div
+                    className={`cloud-layer ${driftClass}`}
+                    style={{
+                      backgroundImage: `url('/clouds/${layer}.png')`,
+                      animationDuration: `${driftDuration}s`,
+                    }}
+                  ></div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <span
+          className="absolute text-[1.2rem] opacity-[0.07] select-none pointer-events-none animate-cat-float"
+          style={{ top: "12%", left: "8%", animationDelay: "0s" }}
+        >
+          🐾
+        </span>
+        <span
+          className="absolute text-[1.2rem] opacity-[0.07] select-none pointer-events-none animate-cat-float"
+          style={{ top: "70%", right: "6%", animationDelay: "2s" }}
+        >
+          🌸
+        </span>
+        <span
+          className="absolute text-[1.2rem] opacity-[0.07] select-none pointer-events-none animate-cat-float"
           style={{
-            background: "#e8e6dc",
-            border: "none",
-            borderRadius: 20,
-            padding: "6px 14px",
-            fontSize: 13,
-            fontWeight: 500,
-            color: "#4d4c48",
-            cursor: "pointer",
-            fontFamily: "system-ui, sans-serif",
+            top: "30%",
+            right: "12%",
+            animationDelay: "4s",
+            fontSize: "0.9rem",
           }}
         >
-          {tx.langToggle}
-        </button>
-      </header>
+          🐱
+        </span>
+        <span
+          className="absolute text-[1.2rem] opacity-[0.07] select-none pointer-events-none animate-cat-float"
+          style={{
+            top: "80%",
+            left: "15%",
+            animationDelay: "1s",
+            fontSize: "0.8rem",
+          }}
+        >
+          💍
+        </span>
 
-      {/* Main content */}
-      <main style={{ flex: 1, overflowY: "auto", paddingBottom: 24 }}>
+        <p className="font-sans text-[0.65rem] tracking-[0.25em] uppercase text-white mb-8">
+          4th october 2023 — and counting
+        </p>
 
-        {/* IDLE STATE */}
-        {state === "idle" && (
-          <div className="fade-in">
-            {/* Hero */}
-            <div style={{ padding: "40px 20px 32px", textAlign: "center" }}>
-              {/* Decorative palm lines */}
-              <div style={{
-                width: 80, height: 80,
-                margin: "0 auto 24px",
-                background: "#faf9f5",
-                borderRadius: "50%",
-                border: "1px solid #e8e6dc",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "rgba(0,0,0,0.05) 0px 4px 24px",
-              }}>
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                  <path d="M20 32c-5 0-10-4-10-10V12a2.5 2.5 0 0 1 5 0v7" stroke="#c96442" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M15 19V9a2.5 2.5 0 0 1 5 0v10" stroke="#c96442" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M20 19V8a2.5 2.5 0 0 1 5 0v11" stroke="#c96442" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M25 19V10a2.5 2.5 0 0 1 5 0v12c0 6-5 10-10 10" stroke="#c96442" strokeWidth="2" strokeLinecap="round"/>
-                  {/* Palm lines */}
-                  <path d="M13 24 Q20 22 27 24" stroke="#d97757" strokeWidth="1" strokeLinecap="round" opacity="0.6"/>
-                  <path d="M12 27 Q20 25 26 26" stroke="#d97757" strokeWidth="1" strokeLinecap="round" opacity="0.4"/>
-                </svg>
-              </div>
+        <h1 className="font-serif text-[4.5rem]  font-extralight leading-[1.05] text-white mb-0">
+          Two Years of
+          <br />
+          <em className="italic">Pranjal</em>
+        </h1>
 
-              <h2 style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 30,
-                fontWeight: 500,
-                color: "#141413",
-                lineHeight: 1.2,
-                marginBottom: 12,
-                letterSpacing: -0.5,
-              }}>
-                {tx.tagline}
-              </h2>
-              <p style={{
-                fontSize: 15,
-                color: "#5e5d59",
-                lineHeight: 1.65,
-                maxWidth: 300,
-                margin: "0 auto",
-              }}>
-                {tx.subtitle}
-              </p>
-            </div>
+        <p className="font-serif italic text-[clamp(1rem,2.5vw,1.35rem)] text-white py-8 mb-12">
+          a small archive of us, for my kitten
+        </p>
 
-            {/* Upload */}
-            <PalmUploader onImage={handleImage} lang={lang} />
+        <div className="w-px h-[60px] bg-gradient-to-b from-transparent via-muted to-transparent my-8 mx-auto"></div>
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-muted/60 animate-pulse">
+          scroll to remember ↓
+        </p>
+      </section>
 
-            {/* How it works */}
-            <div style={{ padding: "32px 20px 0" }}>
-              <p style={{
-                fontSize: 11,
-                fontWeight: 500,
-                color: "#87867f",
-                letterSpacing: 0.8,
-                textTransform: "uppercase",
-                marginBottom: 16,
-              }}>
-                {tx.ctaSecondary}
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {[tx.step1, tx.step2, tx.step3].map((step, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                    <div style={{
-                      width: 26, height: 26, borderRadius: "50%",
-                      background: "#faf9f5",
-                      border: "1px solid #e8e6dc",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 12, fontWeight: 600, color: "#c96442",
-                      flexShrink: 0, marginTop: 1,
-                    }}>
-                      {i + 1}
-                    </div>
-                    <p style={{ fontSize: 14, color: "#5e5d59", lineHeight: 1.5 }}>{step}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+      <div className="timeline">
+        <p className="font-sans text-[0.65rem] tracking-[0.25em] uppercase text-muted text-center mb-16">
+          our story, in order
+        </p>
 
-            {/* Social proof */}
-            <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
-              <p style={{ fontSize: 13, color: "#87867f" }}>
-                ✦ &nbsp; Free to try &nbsp; ✦ &nbsp; Vedic + Western palmistry &nbsp; ✦
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* ANALYZING STATE */}
-        {state === "analyzing" && (
-          <div className="fade-in" style={{
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            minHeight: "60vh", padding: 32, textAlign: "center",
-          }}>
-            {palmPreview && (
-              <div style={{
-                width: 100, height: 100, borderRadius: "50%",
-                overflow: "hidden", border: "2px solid #e8e6dc",
-                marginBottom: 28,
-                boxShadow: "rgba(0,0,0,0.08) 0px 4px 20px",
-              }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={palmPreview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              </div>
-            )}
-
-            {/* Spinner */}
-            <div className="pulse-ring" style={{
-              width: 56, height: 56, borderRadius: "50%",
-              border: "2px solid #e8e6dc",
-              borderTopColor: "#c96442",
-              animation: "spin 1s linear infinite, pulse-ring 2s ease-in-out infinite",
-              marginBottom: 24,
-            }} />
-
-            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-
-            <h3 style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 22, fontWeight: 500,
-              color: "#141413", marginBottom: 8,
-            }}>
-              {tx.analyzing}
-            </h3>
-            <p style={{ fontSize: 14, color: "#87867f" }}>{tx.analyzingSub}</p>
-          </div>
-        )}
-
-        {/* RESULT STATE */}
-        {state === "result" && reading && (
-          <div className="fade-in">
-            <ReadingResult
-              reading={reading}
-              palmPreview={palmPreview}
-              unlocked={unlocked}
-              lang={lang}
-              onUnlock={() => setShowPaywall(true)}
-              onShare={() => {}}
-              onReset={reset}
-            />
-          </div>
-        )}
-
-        {/* ERROR STATE */}
-        {state === "error" && (
-          <div className="fade-in" style={{
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            minHeight: "60vh", padding: 32, textAlign: "center",
-          }}>
-            <div style={{ fontSize: 48, marginBottom: 20 }}>🤚</div>
-            <h3 style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 22, fontWeight: 500,
-              color: "#141413", marginBottom: 8,
-            }}>
-              {tx.errorTitle}
-            </h3>
-            <p style={{ fontSize: 14, color: "#87867f", marginBottom: 24 }}>
-              {tx.errorSub}
-            </p>
-            <button
-              onClick={reset}
-              style={{
-                background: "#c96442", color: "#faf9f5",
-                border: "none", borderRadius: 12,
-                padding: "12px 28px", fontSize: 15, fontWeight: 600,
-                cursor: "pointer", fontFamily: "system-ui, sans-serif",
-              }}
+        {timelineEvents.map((event, index) => (
+          <div
+            className={`entry sticky mb-48 opacity-0 translate-y-6 transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] [&.visible]:opacity-100 [&.visible]:translate-y-0 flex justify-center ${
+              event.isSpecial ? "special" : ""
+            }`}
+            style={{ top: "3rem", zIndex: index + 1 }}
+            id={event.id}
+            key={event.id}
+          >
+            <div
+              className="polaroid-card"
+              style={{ transform: `rotate(${index % 2 === 0 ? "1.8" : "-1.8"}deg)` }}
             >
-              {tx.retry}
-            </button>
-          </div>
-        )}
-      </main>
+              <div className="polaroid-photo">
+                {event.image ? (
+                  <img src={event.image} alt={event.title} />
+                ) : (
+                  <div className="polaroid-dark-photo">
+                    <span className="polaroid-icon">{event.icon}</span>
+                    <p className="polaroid-body-text">{event.text}</p>
+                  </div>
+                )}
+              </div>
 
-      {/* Paywall modal */}
-      {showPaywall && (
-        <PaywallModal
-          lang={lang}
-          onClose={() => setShowPaywall(false)}
-          onSuccess={() => setUnlocked(true)}
-        />
-      )}
-    </div>
+              <div className="polaroid-label">
+                <div className="polaroid-label-title">{event.title}</div>
+                {event.image && (
+                  <p className="polaroid-label-text">{event.text}</p>
+                )}
+                <div className="polaroid-label-date">
+                  {event.date.month} · {event.date.year}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="relative z-10 bg-wine">
+      <div style={{padding:"12px"}} className="max-w-[620px] mx-auto p-8 border-t border-muted/20 text-center">
+        <div className="text-2xl mb-4 opacity-50">𖦹</div>
+        <p className="font-serif italic text-[1.1rem] text-muted mb-8 tracking-[0.05em]">
+          — a note, because i owe you words —
+        </p>
+        <div className="font-serif text-[1.1rem] font-extralight leading-loose text-blush-light text-start space-y-[1.2rem]">
+          <p>Pranjal,</p>
+          <p>
+            I don't have anything expensive to give you today. No dinner
+            reservation, no wrapped box, no grand gesture planned. What I have
+            is this, a quiet collection of everything we've been, laid out so
+            you can see it the way I do.
+          </p>
+          <p>
+            You walked into my life at a Seedhe Maut concert and somehow never
+            left. You became my kitten, my princess, my person. You let me
+            stumble through a half-assed proposal and still said yes to the real
+            one. You came home to me. You let me come home to you.
+          </p>
+          <p>
+            Two years of you has been the best and most disorienting thing. I
+            didn't know I was going to love someone the way I love you — a
+            little messy, very certain, completely yours.
+          </p>
+          <p>
+            Happy anniversary, my love. Here's to every memory we haven't made
+            yet.
+          </p>
+        </div>
+        <div className="font-serif italic text-[1.25rem] text-gold mt-8 text-end">
+          — Nishant 🐾
+        </div>
+      </div>
+
+      <p className="max-w-[620px] mx-auto text-center text-[0.65rem] tracking-[0.2em] uppercase text-muted opacity-35 pt-12 pb-8">
+        made with nothing but love and a late night
+      </p>
+      </div>
+    </>
   );
 }
