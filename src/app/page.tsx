@@ -198,7 +198,7 @@ export default function Home() {
             </p>
             <p>
               You walked(literally) into my life at a Seedhe Maut concert and
-              somehow never left. You became my kitten, my princess, my love, my
+              somehow never left. You became my nakhro, my kitten, my princess, my love, my
               person. You let me stumble through a half-assed proposal and still
               said yes to the real one. You came home to me. You let me come
               home to you.
