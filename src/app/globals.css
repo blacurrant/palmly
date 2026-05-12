@@ -301,10 +301,10 @@ body {
 
 .polaroid-label-text {
   font-family: var(--font-cormorant), serif;
-  font-size: 0.78rem;
-  color: var(--wine-mid);
+  font-size: 0.82rem;
+  color: var(--wine);
   line-height: 1.6;
-  opacity: 0.7;
+  opacity: 0.85;
   margin-top: 2px;
 }
 
@@ -319,6 +319,66 @@ body {
 }
 
 
+
+/* ── Envelope cover ── */
+.envelope-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: var(--wine);
+  cursor: pointer;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 48px), 50% 100%, 0 calc(100% - 48px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.envelope-cover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 18px,
+    rgba(255,255,255,0.015) 18px,
+    rgba(255,255,255,0.015) 19px
+  );
+  pointer-events: none;
+}
+
+.envelope-seal {
+  font-size: 3.5rem;
+  opacity: 0.6;
+  line-height: 1;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.envelope-cover:hover .envelope-seal {
+  opacity: 0.9;
+  transform: scale(1.08);
+}
+
+.envelope-hint {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--blush-light);
+  opacity: 0.45;
+  transition: opacity 0.3s;
+}
+
+.envelope-cover:hover .envelope-hint {
+  opacity: 0.75;
+}
 
 /* ── Font enforcement ── */
 body {

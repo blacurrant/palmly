@@ -23,7 +23,7 @@ export const timelineEvents: TimelineEvent[] = [
     text: (
       <>
         4th October 2023. Two people, a screen between them, and absolutely no idea what they were walking into.{" "}
-        <span className="text-blush italic">You were already dangerous and I didn&apos;t know it yet.</span>
+        <span className="text-black italic">You were already dangerous and I didn&apos;t know it yet. "all swag people are alseep right now"</span>
       </>
     ),
   },
@@ -36,8 +36,8 @@ export const timelineEvents: TimelineEvent[] = [
 
     text: (
       <>
-        12th May 2024. A concert, a crowd, and then — you. Somewhere between the bass drops and the crowd noise, the real thing began.{" "}
-        <span className="text-blush italic">Turns out the best meetings have no agenda.</span>
+        12th May 2024. A concert, a crowd, and then — you. Somewhere before the concert day, we knew it already, the real thing began.{" "}
+        <span className="text-black italic">Turns out the best meetings have no agenda.</span>
       </>
     ),
   },
@@ -50,8 +50,8 @@ export const timelineEvents: TimelineEvent[] = [
 
     text: (
       <>
-        21st August 2024. We did it right — good food, good noise, then the quieter part of the night that belongs only to us.{" "}
-        <span className="text-blush italic">You deserve both the celebration and the calm after it.</span>
+        21st August 2024. We did it right, good food, good noise and banarasi patiala, then the quieter part of the night that belongs only to us.{" "}
+        <span className="text-black italic">You deserve both the celebration and the calm after it.</span>
       </>
     ),
   },
@@ -65,7 +65,7 @@ export const timelineEvents: TimelineEvent[] = [
     text: (
       <>
         1st December 2024. Okay, it wasn&apos;t perfect. The ring was yours, the words were probably stumbled.{" "}
-        <span className="text-blush italic">But the feeling was real, even if the execution wasn&apos;t.</span> You knew what I meant.
+        <span className="text-black italic">But the feeling was real, even if the execution wasn&apos;t.</span> You knew what I meant.
       </>
     ),
   },
@@ -80,7 +80,7 @@ export const timelineEvents: TimelineEvent[] = [
     text: (
       <>
         22nd February 2025. A silver filigree flower. I got it right this time.{" "}
-        <span className="text-blush italic">Some things deserve a second draft — you were always worth the rewrite.</span>
+        <span className="text-black italic">Some things deserve a second draft, you were always worth the rewrite.</span>
       </>
     ),
   },
@@ -94,7 +94,7 @@ export const timelineEvents: TimelineEvent[] = [
     text: (
       <>
         You came home. Diwali felt different that year — louder, warmer, better.{" "}
-        <span className="text-blush italic">Every light in that house knew you were there.</span>
+        <span className="text-black italic">Every light in that house knew you were there, and i was just happy that you were there.</span>
       </>
     ),
   },
@@ -108,7 +108,7 @@ export const timelineEvents: TimelineEvent[] = [
     text: (
       <>
         November 2025. Packed everything up and landed where you are.{" "}
-        <span className="text-blush italic">It wasn&apos;t a sacrifice. It was the easiest decision I&apos;ve made in years.</span>
+        <span className="text-black italic">It wasn&apos;t a sacrifice. It was the easiest decision I&apos;ve made in years.</span>
       </>
     ),
   },
@@ -121,8 +121,8 @@ export const timelineEvents: TimelineEvent[] = [
 
     text: (
       <>
-        December 2025. Lights, cold outside, you across from me.{" "}
-        <span className="text-blush italic">I don&apos;t think I&apos;d ever really liked December before you.</span>
+        December 2025. Lights, cookies, music, good people, cold outside, you across from me from where i can just adore and appreciate you.{" "}
+        <span className="text-black italic">I don&apos;t think I&apos;d ever really liked December or christmas before you. Even if things were the way they were, it was the best christmas of my life.</span>
       </>
     ),
   },
@@ -135,8 +135,8 @@ export const timelineEvents: TimelineEvent[] = [
 
     text: (
       <>
-        14th February 2026. A proper table, proper food, the whole thing.{" "}
-        <span className="text-blush italic">You deserved the fancy version for once — and you wore it like you were born for it.</span>
+        14th February 2026. A proper place, some violine, some live cheesecake, proper food, some drinks, the whole thing.{" "}
+        <span className="text-black italic">You deserve all the fancy things — and you wore it like you were born for it.</span>
       </>
     ),
   },
@@ -150,7 +150,7 @@ export const timelineEvents: TimelineEvent[] = [
     text: (
       <>
         March 2026. Locked in a room, with you and your people.{" "}
-        <span className="text-blush italic">You&apos;re somehow even more yourself when your friends are around — and I love that version of you too.</span>
+        <span className="text-black italic">You&apos;re somehow even more yourself when your friends are around — and I love that version of you too, even though i become the local punching bag </span>
       </>
     ),
   },

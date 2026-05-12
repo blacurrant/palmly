@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { timelineEvents } from "../data/timeline";
 
 export default function Home() {
+  const [letterOpen, setLetterOpen] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const cloudRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -138,7 +139,9 @@ export default function Home() {
           >
             <div
               className="polaroid-card"
-              style={{ transform: `rotate(${index % 2 === 0 ? "1.8" : "-1.8"}deg)` }}
+              style={{
+                transform: `rotate(${index % 2 === 0 ? "1.8" : "-1.8"}deg)`,
+              }}
             >
               <div className="polaroid-photo">
                 {event.image ? (
@@ -154,7 +157,7 @@ export default function Home() {
               <div className="polaroid-label">
                 <div className="polaroid-label-title">{event.title}</div>
                 {event.image && (
-                  <p className="polaroid-label-text">{event.text}</p>
+                  <p className="polaroid-label-text ">{event.text}</p>
                 )}
                 <div className="polaroid-label-date">
                   {event.date.month} · {event.date.year}
@@ -165,44 +168,62 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="relative z-10 bg-wine">
-      <div style={{padding:"12px"}} className="max-w-[620px] mx-auto p-8 border-t border-muted/20 text-center">
-        <div className="text-2xl mb-4 opacity-50">𖦹</div>
-        <p className="font-serif italic text-[1.1rem] text-muted mb-8 tracking-[0.05em]">
-          — a note, because i owe you words —
-        </p>
-        <div className="font-serif text-[1.1rem] font-extralight leading-loose text-blush-light text-start space-y-[1.2rem]">
-          <p>Pranjal,</p>
-          <p>
-            I don't have anything expensive to give you today. No dinner
-            reservation, no wrapped box, no grand gesture planned. What I have
-            is this, a quiet collection of everything we've been, laid out so
-            you can see it the way I do.
-          </p>
-          <p>
-            You walked into my life at a Seedhe Maut concert and somehow never
-            left. You became my kitten, my princess, my person. You let me
-            stumble through a half-assed proposal and still said yes to the real
-            one. You came home to me. You let me come home to you.
-          </p>
-          <p>
-            Two years of you has been the best and most disorienting thing. I
-            didn't know I was going to love someone the way I love you, a
-            little messy, very certain, completely yours.
-          </p>
-          <p>
-            Happy anniversary, my love. Here's to every memory we haven't made
-            yet.
-          </p>
-        </div>
-        <div className="font-serif italic text-[1.25rem] text-gold mt-8 text-end">
-          — Nishant 🐾
-        </div>
-      </div>
+      <div className="relative z-10 bg-wine items-center justify-center flex flex-col overflow-hidden">
+        <div
+          style={{ padding: "12px" }}
+          className="max-w-[620px] mx-auto p-8 border-t border-muted/20 text-center"
+        >
+          <div
+            className="envelope-cover"
+            style={{ transform: letterOpen ? "translateY(105%)" : "translateY(0)" }}
+            onClick={() => setLetterOpen(true)}
+            aria-label="Open letter"
+          >
+            <p className="envelope-hint text-lg! animate-bounce">tap</p>
+            <div className="envelope-seal">𖦹</div>
+            <p className="envelope-hint text-lg!">{`from nishant,`}<br></br> {`for his pranjal <3`}</p>
+          </div>
 
-      <p className="max-w-[620px] mx-auto text-center text-[0.65rem] tracking-[0.2em] uppercase text-muted opacity-35 pt-12 pb-8">
-        made with nothing but love and a late night
-      </p>
+          <div className="text-2xl mb-4 opacity-50">𖦹</div>
+          <p className="font-serif italic text-[1.1rem] text-muted mb-8 tracking-[0.05em]">
+            — a note, because i owe you words —
+          </p>
+          <div className="font-serif text-[1.1rem] font-extralight leading-loose text-blush-light text-start space-y-[1.2rem]">
+            <p>Pranjal,</p>
+            <p>
+              I don't have anything expensive to give you today. I was even
+              late. No dinner reservation, no wrapped box, no grand gesture
+              planned. What I have is this, a quiet collection of everything
+              we've been, laid out so you can see it the way I do.
+            </p>
+            <p>
+              You walked(literally) into my life at a Seedhe Maut concert and
+              somehow never left. You became my kitten, my princess, my love, my
+              person. You let me stumble through a half-assed proposal and still
+              said yes to the real one. You came home to me. You let me come
+              home to you.
+            </p>
+            <p>
+              Two years of you has been the best and most disorienting thing. I
+              didn't know I was going to this change this much both emotionally
+              and mentally, for the good for it. I didn't know I was capable of
+              loving someone the way I love you, a little messy, very certain,
+              completely yours.
+            </p>
+            <p>
+              Happy anniversary, my love. Here's to every memory we haven't made
+              yet.
+            </p>
+            <p>I love you, pranjal</p>
+          </div>
+          <div className="font-serif italic text-[1.25rem] text-gold mt-8 text-end">
+            — Nishant 🐾
+          </div>
+        </div>
+
+        <p className="max-w-[620px] mx-auto text-center text-[0.65rem] tracking-[0.2em] uppercase text-muted opacity-35 pt-12 pb-8">
+          made with nothing but love and a late night
+        </p>
       </div>
     </>
   );
