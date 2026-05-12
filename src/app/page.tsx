@@ -104,7 +104,7 @@ export default function Home() {
         </span>
 
         <p className="font-sans text-[0.65rem] tracking-[0.25em] uppercase text-white mb-8">
-          4th october 2023 — and counting
+          12th May 2024 — and counting
         </p>
 
         <h1 className="font-serif text-[4.5rem]  font-extralight leading-[1.05] text-white mb-0">
@@ -118,13 +118,13 @@ export default function Home() {
         </p>
 
         <div className="w-px h-[60px] bg-gradient-to-b from-transparent via-muted to-transparent my-8 mx-auto"></div>
-        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-muted/60 animate-pulse">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-white animate-pulse">
           scroll to remember ↓
         </p>
       </section>
 
       <div className="timeline">
-        <p className="font-sans text-[0.65rem] tracking-[0.25em] uppercase text-muted text-center mb-16">
+        <p className="font-sans text-[0.65rem] tracking-[0.25em] uppercase text-muted text-center mb-16 ">
           our story, in order
         </p>
 
